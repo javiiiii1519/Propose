@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Janu 💜</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  overflow: hidden;
+  text-align: center;
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+h1 {
+  font-size: 28px;
+  color: #5b21b6;
+  margin: 20px;
+  text-shadow: 0 0 15px rgba(124,58,237,0.5);
+}
+
+button {
+  padding: 12px 22px;
+  font-size: 18px;
+  margin: 8px;
+  cursor: pointer;
+  border-radius: 12px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+/* YES */
+#yes {
+  background: linear-gradient(45deg, #7c3aed, #a78bfa);
+  color: white;
+  box-shadow: 0 0 15px rgba(124,58,237,0.6);
+}
+
+/* glow pulse */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+#yes {
+  animation: pulse 2s infinite;
+}
+
+/* NO */
+#no {
+  background-color: #c4b5fd;
+  color: white;
+  position: absolute;
+}
+
+/* hearts */
+.heart {
+  position: fixed;
+  font-size: 20px;
+  pointer-events: auto;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* sparkle */
+.sparkle {
+  position: fixed;
+  font-size: 12px;
+  animation: sparkleAnim 0.6s linear forwards;
+}
+@keyframes sparkleAnim {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2) translateY(-10px); }
+}
+
+/* confetti */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: #7c3aed;
+  animation: fall 2s linear forwards;
+}
+@keyframes fall {
+  to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question"></h1>
+
+<button id="yes">Yes 💜 🌚</button>
+<button id="no">No 🥺😞</button>
+
+<audio id="music">
+  <source src="https://www2.cs.uic.edu/~i101/SoundFiles/StarWars60.wav">
+</audio>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const question = document.getElementById("question");
+const music = document.getElementById("music");
+
+/* typewriter */
+const text = "Janu, will you be my Valentine? 💜 🫣";
+let index = 0;
+function typeEffect() {
+  if (index < text.length) {
+    question.innerHTML += text.charAt(index);
+    index++;
+    setTimeout(typeEffect, 60);
+  }
+}
+typeEffect();
+
+/* messages */
+const messages = [
+  "Are you sure Janu? 🥺",
+  "Really sure ah? 😞",
+  "Think again please 🥺💜",
+  "That hurts... 😞",
+  "Don’t do this to me 🥺",
+  "Okay… I’ll still wait 🫣💜"
+];
+
+let i = 0;
+let scale = 1;
+
+/* NO */
+noBtn.addEventListener("click", () => {
+  question.innerText = messages[i % messages.length];
+  i++;
+
+  const x = Math.random() * (window.innerWidth - 100);
+  const y = Math.random() * (window.innerHeight - 50);
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+
+  scale += 0.25;
+  yesBtn.style.transform = "scale(" + scale + ")";
+
+  noBtn.style.transform = "scale(0.8)";
+});
+
+/* YES */
+yesBtn.addEventListener("click", () => {
+
+  /* play music */
+  music.play();
+
+  /* confetti */
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * window.innerWidth + "px";
+    c.style.top = "-10px";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),2000);
+  }
+
+  document.body.innerHTML += `
+    <div style="position:absolute; top:40%; text-align:center; width:100%;">
+      <h1 style="color:#5b21b6; font-size:38px;">Yeahhhh baby 💜🌚</h1>
+      <h2>You made my day special 🫣</h2>
+      <h2>I love you so muchhh 💜</h2>
+      <h3>Javith weds Janu 💍</h3>
+    </div>
+  `;
+});
+
+/* hearts */
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "💜";
+
+  let x = Math.random() * window.innerWidth;
+  let y = Math.random() * window.innerHeight;
+
+  heart.style.left = x + "px";
+  heart.style.top = y + "px";
+
+  document.body.appendChild(heart);
+
+  let dx = (Math.random() - 0.5) * 2;
+  let dy = (Math.random() - 0.5) * 2;
+
+  function move() {
+    x += dx;
+    y += dy;
+
+    if (x <= 0 || x >= window.innerWidth) dx *= -1;
+    if (y <= 0 || y >= window.innerHeight) dy *= -1;
+
+    heart.style.left = x + "px";
+    heart.style.top = y + "px";
+
+    requestAnimationFrame(move);
+  }
+  move();
+
+  heart.addEventListener("click", () => {
+    for (let i = 0; i < 6; i++) {
+      const s = document.createElement("div");
+      s.className = "sparkle";
+      s.innerText = "✨";
+      s.style.left = heart.style.left;
+      s.style.top = heart.style.top;
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(),600);
+    }
+    heart.style.opacity = "0";
+    setTimeout(()=>heart.remove(),300);
+  });
+
+  setTimeout(()=>heart.remove(),8000);
+}
+setInterval(createHeart, 350);
+</script>
+
+</body>
+</html>
